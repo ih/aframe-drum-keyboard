@@ -10,7 +10,7 @@ AFRAME.registerComponent('keyboard-key', {
     });
 
     let uiButtonAttributes = this.el.getAttribute('ui-button');
-
+    // why can't we create this directly from HTML?
     let label = document.createElement('a-entity');
     label.setAttribute('text', {
       value: this.data.value,

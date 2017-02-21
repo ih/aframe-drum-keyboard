@@ -1,41 +1,42 @@
 AFRAME.registerComponent('keyboard', {
 
   init: function () {
-    let defaultKeyValues = ['q', 'w'];
-    let keys = this.constructDefaultKeys(defaultKeyValues);
-    let layout = this.constructDefaultLayout(defaultKeyValues);
-    this.addKeysToKeyboard(defaultKeyValues, keys, layout);
+    let defaultKeysData = [{value: 'q'}, {value: 'w'}, {value: '\n', label: 'enter'}];
+    let keys = this.constructDefaultKeys(defaultKeysData);
+    let layout = this.constructDefaultLayout(defaultKeysData);
+    this.addKeysToKeyboard(defaultKeysData, keys, layout);
     // connectKeyboardToDisplay();
   },
 
-  constructDefaultKeys: function (keyValues) {
+  constructDefaultKeys: function (keysData) {
     let keyEntities = {};
-    keyValues.forEach((keyValue) => {
+    keysData.forEach((keyData) => {
       let keyEntity = document.createElement('a-entity');
       keyEntity.setAttribute('ui-button', '');
       keyEntity.setAttribute('keyboard-key', {
-        value: keyValue
+        value: keyData.value,
+        label: keyData.label
       });
-      keyEntities[keyValue] = keyEntity;
+      keyEntities[keyData.value] = keyEntity;
     });
     return keyEntities;
   },
 
-  constructDefaultLayout: function (keyValues) {
+  constructDefaultLayout: function (keysData) {
     let layout = {};
     let keySpacing = .3;
     let currentX = 0;
-    keyValues.forEach((keyValue) => {
-      layout[keyValue] = {x: currentX, y: 0, z: 0};
+    keysData.forEach((keyData) => {
+      layout[keyData.value] = {x: currentX, y: 0, z: 0};
       currentX += keySpacing;
     });
     return layout;
   },
 
-  addKeysToKeyboard: function (keyValues, keys, layout) {
-    keyValues.forEach((keyValue) => {
-      let keyEntity = keys[keyValue];
-      let keyPosition = layout[keyValue];
+  addKeysToKeyboard: function (keysData, keys, layout) {
+    keysData.forEach((keyData) => {
+      let keyEntity = keys[keyData.value];
+      let keyPosition = layout[keyData.value];
       keyEntity.setAttribute('position', keyPosition);
       this.el.appendChild(keyEntity);
     });

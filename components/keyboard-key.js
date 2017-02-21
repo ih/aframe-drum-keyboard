@@ -1,6 +1,7 @@
 AFRAME.registerComponent('keyboard-key', {
   schema: {
-    value: {type: 'string'}
+    value: {type: 'string'},
+    label: {type: 'string'}
   },
 
   init: function () {
@@ -13,7 +14,7 @@ AFRAME.registerComponent('keyboard-key', {
     // why can't we create this directly from HTML?
     let label = document.createElement('a-entity');
     label.setAttribute('text', {
-      value: this.data.value,
+      value: this.data.label ? this.data.label : this.data.value,
       align: 'center',
       width: 3
     });

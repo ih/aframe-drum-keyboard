@@ -44,12 +44,12 @@ AFRAME.registerComponent('keyboard', {
     let row4 = keysData.slice(30, 37);
     let space = keysData[37];
     let layout = {};
-    let height = -1;
+    let height = 0;
     let keySpacing = .3;
     let rowSpacing = .5;
     let currentZ = 0;
     let leftRowPadding = .3;
-    [row1, row2, row3].forEach((row, index) => {
+    [row1, row2, row3, row4].forEach((row, index) => {
       let currentX = -1.5 + (index * leftRowPadding);
       row.forEach((keyData) => {
         layout[keyData.value] = {x: currentX, y: height, z: currentZ};

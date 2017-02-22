@@ -7,7 +7,7 @@ AFRAME.registerComponent('keyboard-key', {
   init: function () {
     let _this = this;
     this.el.addEventListener('pressed', () => {
-      console.log(_this.data.value);
+      _this.el.emit('keypress', {key: _this.data.value})
     });
 
     let uiButtonAttributes = this.el.getAttribute('ui-button');
@@ -22,4 +22,4 @@ AFRAME.registerComponent('keyboard-key', {
     label.setAttribute('position', {x: 0, y: uiButtonAttributes.size, z: 0});
     this.el.appendChild(label);
   }
-})
+});

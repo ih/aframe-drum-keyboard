@@ -2,10 +2,13 @@ AFRAME.registerComponent('keyboard', {
 
   init: function () {
     let defaultKeysData = this.generateDefaultKeyData();
+    // create key entities i.e. entities w/ ui-button and keyboard-key components
     let keys = this.constructDefaultKeys(defaultKeysData);
+    // build the layout which is a dictionary of positions for the keys
     let layout = this.constructDefaultLayout(defaultKeysData);
+    // forward the key events as well as add the keys to the document and set
+    // their position
     this.addKeysToKeyboard(defaultKeysData, keys, layout);
-    // connectKeyboardToDisplay();
   },
 
   generateDefaultKeyData: function () {
@@ -45,7 +48,7 @@ AFRAME.registerComponent('keyboard', {
     let space = keysData[37];
     let layout = {};
     let height = 0;
-    let keySpacing = .3;
+    let keySpacing = .4;
     let rowSpacing = .5;
     let currentZ = 0;
     let leftRowPadding = .3;
@@ -63,10 +66,18 @@ AFRAME.registerComponent('keyboard', {
 
   addKeysToKeyboard: function (keysData, keys, layout) {
     keysData.forEach((keyData) => {
+      // add and position keys in the scene
       let keyEntity = keys[keyData.value];
       let keyPosition = layout[keyData.value];
       keyEntity.setAttribute('position', keyPosition);
       this.el.appendChild(keyEntity);
+      // pass through key events
+      let _this = this;
+      keyEntity.addEventListener('keypress', (event) => {
+        // in the future keyboard can maintain state of modifiers like shift/ctrl
+        // and add those to the event
+        _this.el.emit('keypress', event.detail);
+      });
     });
   }
 });

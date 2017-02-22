@@ -1,0 +1,22 @@
+{
+  'env': {
+    'browser': true,
+    'es6': true
+  },
+  'globals': {
+    'THREE': false,
+    'AceEditor': false,
+  },
+  'rules': {
+    'no-underscore-dangle': 0,
+    'quotes': [1, 'single'],
+    'strict': [1, 'never'],
+    'no-console': 1,
+    'no-eval': 0,
+    'semi': 2
+  },
+  'parserOptions': {
+    'ecmaVersion': 6,
+    'sourceType': 'module'
+  }
+}

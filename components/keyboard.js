@@ -76,13 +76,6 @@ AFRAME.registerComponent('keyboard', {
       let keyPosition = layout[keyData.value];
       keyEntity.setAttribute('position', keyPosition);
       this.el.appendChild(keyEntity);
-      // pass through key events
-      let _this = this;
-      keyEntity.addEventListener('keypress', (event) => {
-        // in the future keyboard can maintain state of modifiers like shift/ctrl
-        // and add those to the event
-        _this.el.emit('keypress', event.detail);
-      });
     });
   }
 });

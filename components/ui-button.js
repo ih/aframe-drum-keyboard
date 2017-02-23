@@ -52,6 +52,8 @@ AFRAME.registerComponent('ui-button', {
       });
       top.setAttribute('position', { x: 0, y: this.data.topY, z: 0 });
       top.setAttribute('material', { color: this.data.color });
+      // do this with a schema instead of modifying ui-button
+      top.setAttribute('class', 'top');
     }
     this.top = top;
     this.el.appendChild(top);

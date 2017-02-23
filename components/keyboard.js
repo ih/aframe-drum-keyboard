@@ -1,5 +1,9 @@
 AFRAME.registerComponent('keyboard', {
 
+  schema: {
+    collidable: {type: 'string'}
+  },
+
   init: function () {
     let defaultKeysData = this.generateDefaultKeyData();
     // create key entities i.e. entities w/ ui-button and keyboard-key components
@@ -33,7 +37,8 @@ AFRAME.registerComponent('keyboard', {
       keyEntity.setAttribute('ui-button', '');
       keyEntity.setAttribute('keyboard-key', {
         value: keyData.value,
-        label: keyData.label
+        label: keyData.label,
+        collidable: this.data.collidable
       });
       keyEntities[keyData.value] = keyEntity;
     });

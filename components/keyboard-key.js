@@ -1,7 +1,8 @@
 AFRAME.registerComponent('keyboard-key', {
   schema: {
     value: {type: 'string'},
-    label: {type: 'string'}
+    label: {type: 'string'},
+    collidable: {type: 'string'}
   },
 
   init: function () {
@@ -21,5 +22,22 @@ AFRAME.registerComponent('keyboard-key', {
     label.setAttribute('rotation', { x: -90, y: 0, z: 0 });
     label.setAttribute('position', {x: 0, y: uiButtonAttributes.size, z: 0});
     this.el.appendChild(label);
+  },
+
+  tick: function () {
+    let top = this.el.querySelector('.top');
+    let mesh = top.getObject3D('mesh');
+    let topBB = new THREE.Box3().setFromObject(mesh);
+    let self = this;
+    // move definition of collidables to udpate?
+    let collidables = this.el.sceneEl.querySelectorAll(this.data.collidable);
+    collidables.forEach(function(collidable) {
+      let collidableBB = new THREE.Box3().setFromObject(collidable.object3D);
+      let collision = topBB.intersectsBox(collidableBB);
+
+      if (collision) {
+        self.el.emit('hit');
+      }
+    });
   }
 });

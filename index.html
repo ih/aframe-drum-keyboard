@@ -3,11 +3,14 @@
     <script src="https://rawgit.com/aframevr/aframe/master/dist/aframe-master.min.js"></script>
 
     <script src="https://unpkg.com/aframe-teleport-controls/dist/aframe-teleport-controls.min.js"></script>
-
+    <script src="https://rawgit.com/maxkrieger/aframe-draw-component/master/dist/aframe-draw-component.js"></script>
+    <script src="https://rawgit.com/scenevr/htmltexture-component/master/dist/aframe-htmltexture-component.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="components/ui-button.js"></script>
     <script src="components/keyboard-key.js"></script>
     <script src="components/keyboard.js"></script>
     <script src="components/simple-display.js"></script>
+    <script src="components/ace-display.js"></script>
     <script src="components/mallet.js"></script>
   </head>
   <body>
@@ -15,10 +18,15 @@
       <a-entity id="left-hand" hand-controls="left" teleport-controls></a-entity>
       <a-entity id="right-hand" hand-controls="right"></a-entity>
       <a-sky radius="50" color="#000" position="0 0 0"></a-sky>
-      <a-entity id="keyboard" keyboard="collidable: a-entity[mallet] .head" position="0 .9 -1" scale=".3 .3 .3"></a-entity>
-      <a-entity simple-display="inputDevice: #keyboard" position="0 1.5 -1"></a-entity>
+      <a-entity id="keyboard" keyboard="collidable: a-entity[mallet] .head" position="0 .8 -.5" scale=".3 .3 .3"></a-entity>
+      <!-- <a-entity simple-display="inputDevice: #keyboard" position="0 1.5 -1"></a-entity> -->
+      <a-entity ace-display="inputDevice: #keyboard" position="0 1 -1"></a-entity>
       <a-entity mallet="hand: #left-hand;"></a-entity>
       <a-entity mallet="hand: #right-hand;"></a-entity>
     </a-scene>
+    <!-- <div id="editor">
+var x = "All this is syntax highlighted";
+return x;
+    </div> -->
   </body>
 </html>

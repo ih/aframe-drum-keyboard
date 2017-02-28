@@ -22,6 +22,8 @@ AFRAME.registerComponent('keyboard-key', {
     label.setAttribute('rotation', { x: -90, y: 0, z: 0 });
     label.setAttribute('position', {x: 0, y: uiButtonAttributes.size, z: 0});
     this.el.appendChild(label);
+
+    this.collidables = this.el.sceneEl.querySelectorAll(this.data.collidable);
   },
 
   tick: function () {
@@ -30,8 +32,7 @@ AFRAME.registerComponent('keyboard-key', {
     let topBB = new THREE.Box3().setFromObject(mesh);
     let self = this;
     // move definition of collidables to udpate?
-    let collidables = this.el.sceneEl.querySelectorAll(this.data.collidable);
-    collidables.forEach(function(collidable) {
+    this.collidables.forEach(function(collidable) {
       let collidableBB = new THREE.Box3().setFromObject(collidable.object3D);
       let collision = topBB.intersectsBox(collidableBB);
 

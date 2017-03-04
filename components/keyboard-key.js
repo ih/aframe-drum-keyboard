@@ -1,21 +1,25 @@
 AFRAME.registerComponent('keyboard-key', {
   schema: {
-    value: {type: 'string'},
+    code: {type: 'string'},
     label: {type: 'string'},
     collidable: {type: 'string'}
   },
 
   init: function () {
     let _this = this;
+    // comes from the button component
     this.el.addEventListener('pressed', () => {
-      _this.el.emit('keypress', {key: _this.data.value});
+      _this.el.emit('keypress', {
+        code: _this.data.code,
+        label: _this.data.label
+      });
     });
 
     let uiButtonAttributes = this.el.getAttribute('ui-button');
     // why can't we create this directly from HTML?
     let label = document.createElement('a-entity');
     label.setAttribute('text', {
-      value: this.data.label ? this.data.label : this.data.value,
+      value: this.data.label ? this.data.label : this.data.code,
       align: 'center',
       width: 3
     });
@@ -37,6 +41,7 @@ AFRAME.registerComponent('keyboard-key', {
       let collision = topBB.intersectsBox(collidableBB);
 
       if (collision) {
+        // get the button to do a keypress
         self.el.emit('hit');
       }
     });

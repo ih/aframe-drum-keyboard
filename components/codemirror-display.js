@@ -19,15 +19,14 @@ AFRAME.registerComponent('codemirror-display', {
     });
 
     let _this = this;
-    _this.editor.focus();
+
     this.data.inputDevice.addEventListener('keypress', (event) => {
-      // needs keyCode to be present on the event
-      // https://github.com/codemirror/CodeMirror/blob/96cd8885ad759350273c71235493f6b225590442/src/edit/key_events.js#L106
-      // let keyboardEvent = event.detail;
-      // _this.editor.triggerOnKeyPress(keyboardEvent);
-      // _this.editor.focus();
-      // _this.editorElement.dispatchEvent(event.detail);
-      // _this.editor.insert(event.detail.key);
+      let key = event.detail.key;
+      if (/\w?/.test(key)) {
+        _this.editor.insert(event.detail.key);
+      } else if (key === 'Space') {
+        _this.editor.insert(' ');
+      }
     });
   }
 });

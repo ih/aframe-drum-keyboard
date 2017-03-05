@@ -29,9 +29,17 @@ AFRAME.registerComponent('ace-display', {
 
     let _this = this;
     this.data.inputDevice.addEventListener('keypress', (event) => {
-      _this.editor.focus();
-      _this.editorElement.dispatchEvent(event.detail);
-      // _this.editor.insert(event.detail.key);
+      let key = event.detail.key;
+      if (key === 'Space') {
+        _this.editor.insert(' ');
+      } else if (key === 'Backspace') {
+        let session = _this.editor.getSession();
+        let text = session.getValue();
+        text = text.slice(0, text.length - 1);
+        session.setValue(text);
+      } else {
+        _this.editor.insert(event.detail.key);
+      }
     });
   }
 });

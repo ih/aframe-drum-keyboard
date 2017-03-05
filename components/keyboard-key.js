@@ -1,6 +1,6 @@
 AFRAME.registerComponent('keyboard-key', {
   schema: {
-    code: {type: 'string'},
+    value: {type: 'string'},
     label: {type: 'string'},
     collidable: {type: 'string'}
   },
@@ -9,17 +9,19 @@ AFRAME.registerComponent('keyboard-key', {
     let _this = this;
     // comes from the button component
     this.el.addEventListener('pressed', () => {
+      // don't bubble, instead the keyboard will receive the event
+      // then emit it's own event that may take into account other factors e.g. shift key
       _this.el.emit('keypress', {
-        code: _this.data.code,
+        value: _this.data.value,
         label: _this.data.label
-      });
+      }, false);
     });
 
     let uiButtonAttributes = this.el.getAttribute('ui-button');
     // why can't we create this directly from HTML?
     let label = document.createElement('a-entity');
     label.setAttribute('text', {
-      value: this.data.label ? this.data.label : this.data.code,
+      value: this.data.label ? this.data.label : this.data.value,
       align: 'center',
       width: 3
     });

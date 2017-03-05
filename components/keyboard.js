@@ -17,22 +17,19 @@ AFRAME.registerComponent('keyboard', {
   },
 
   generateDefaultKeyData: function () {
-    return '1234567890\bQWERTYUIOPASDFGHJKL\nZXCVBNM '.split('').map((character) => {
+    return '1234567890\bqwertyuiopasdfghjkl\nzxcvbnm '.split('').map((character) => {
       var keyData = {};
-      if (/\d/.test(character)) {
-        keyData.code = `Digit${character}`;
-        keyData.label = character;
-      } else if (/\w/.test(character)) {
-        keyData.code = `Key${character}`;
+      if (/\w/.test(character)) {
+        keyData.value = character;
         keyData.label = character;
       } else if (character === '\n') {
         keyData.label = 'enter';
-        keyData.code = 'Enter';
+        keyData.value = 'Enter';
       } else if (character === ' ') {
           keyData.label = 'space';
-          keyData.code = 'Space';
+          keyData.value = 'Space';
       } else if (character === '\b') {
-          keyData.label = 'Backspace';
+          keyData.label = 'backspace';
           keyData.value = 'Backspace';
       }
 
@@ -46,11 +43,11 @@ AFRAME.registerComponent('keyboard', {
       let keyEntity = document.createElement('a-entity');
       keyEntity.setAttribute('ui-button', '');
       keyEntity.setAttribute('keyboard-key', {
-        code: keyData.code,
+        value: keyData.value,
         label: keyData.label,
         collidable: this.data.collidable
       });
-      keyEntities[keyData.code] = keyEntity;
+      keyEntities[keyData.value] = keyEntity;
     });
     return keyEntities;
   },
@@ -70,20 +67,21 @@ AFRAME.registerComponent('keyboard', {
     [row1, row2, row3, row4].forEach((row, index) => {
       let currentX = -1.5 + (index * leftRowPadding);
       row.forEach((keyData) => {
-        layout[keyData.code] = {x: currentX, y: height, z: currentZ};
+        layout[keyData.value] = {x: currentX, y: height, z: currentZ};
         currentX += keySpacing;
       });
       currentZ += rowSpacing;
     });
-    layout[space.code] = {x: 0, y: height, z: currentZ};
+    layout[space.value] = {x: 0, y: height, z: currentZ};
     return layout;
   },
 
   addKeysToKeyboard: function (keysData, keys, layout) {
+    let _this = this;
     keysData.forEach((keyData) => {
       // add and position keys in the scene
-      let keyEntity = keys[keyData.code];
-      let keyPosition = layout[keyData.code];
+      let keyEntity = keys[keyData.value];
+      let keyPosition = layout[keyData.value];
       keyEntity.setAttribute('position', keyPosition);
       this.el.appendChild(keyEntity);
 
@@ -93,25 +91,11 @@ AFRAME.registerComponent('keyboard', {
       keyEntity.addEventListener('keypress', (event) => {
         let keyPressData = event.detail;
         let keyboardEvent = new KeyboardEvent('keypress', {
-          code: keyPressData.code,
-          keyCode: _this.labelToKeyCode(_this.data.label),
+          key: keyPressData.value,
           target: document
         });
-        document.dispatchEvent(keyboardEvent);
+        _this.el.emit('keypress', keyboardEvent);
       });
     });
-  },
-
-    // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
-  // chrome for now...
-  // kind of a hack, should really do codeToKeyCode
-  labelToKeyCode: function (label) {
-    return 65;
-    if (/\d/.test(label)) {
-      let numberValue = Number(label);
-      return numberValue + 48;
-    } else {
-      return 65;
-    }
   }
 });

@@ -13,19 +13,26 @@ AFRAME.registerComponent('keyboard', {
     // forward the key events as well as add the keys to the document and set
     // their position
     this.addKeysToKeyboard(defaultKeysData, keys, layout);
+
   },
 
   generateDefaultKeyData: function () {
-    return '1234567890qwertyuiopasdfghjkl\nzxcvbnm '.split('').map((character) => {
-      var keyData = {value: character};
-      switch (character) {
-        case '\n':
+    return '1234567890\bqwertyuiopasdfghjkl\nzxcvbnm '.split('').map((character) => {
+      var keyData = {};
+      if (/\w/.test(character)) {
+        keyData.value = character;
+        keyData.label = character;
+      } else if (character === '\n') {
         keyData.label = 'enter';
-        break;
-        case ' ':
-        keyData.label = 'space';
-        break;
+        keyData.value = 'Enter';
+      } else if (character === ' ') {
+          keyData.label = 'space';
+          keyData.value = 'Space';
+      } else if (character === '\b') {
+          keyData.label = 'backspace';
+          keyData.value = 'Backspace';
       }
+
       return keyData;
     });
   },
@@ -46,11 +53,11 @@ AFRAME.registerComponent('keyboard', {
   },
 
   constructDefaultLayout: function (keysData) {
-    let row1 = keysData.slice(0, 10);
-    let row2 = keysData.slice(10, 20);
-    let row3 = keysData.slice(20, 30);
-    let row4 = keysData.slice(30, 37);
-    let space = keysData[37];
+    let row1 = keysData.slice(0, 11);
+    let row2 = keysData.slice(11, 21);
+    let row3 = keysData.slice(21, 31);
+    let row4 = keysData.slice(31, 38);
+    let space = keysData[38];
     let layout = {};
     let height = 0;
     let keySpacing = .4;
@@ -70,12 +77,25 @@ AFRAME.registerComponent('keyboard', {
   },
 
   addKeysToKeyboard: function (keysData, keys, layout) {
+    let _this = this;
     keysData.forEach((keyData) => {
       // add and position keys in the scene
       let keyEntity = keys[keyData.value];
       let keyPosition = layout[keyData.value];
       keyEntity.setAttribute('position', keyPosition);
       this.el.appendChild(keyEntity);
+
+      // add listeners to the keys
+      // we create the keyboardevents here instead of the individual keys
+      // so we can set things like shift
+      keyEntity.addEventListener('keypress', (event) => {
+        let keyPressData = event.detail;
+        let keyboardEvent = new KeyboardEvent('keypress', {
+          key: keyPressData.value,
+          target: document
+        });
+        _this.el.emit('keypress', keyboardEvent);
+      });
     });
   }
 });

@@ -1,0 +1,35 @@
+<html>
+<head>
+  <script src="https://rawgit.com/aframevr/aframe/master/dist/aframe-master.min.js"></script>
+  <script src="https://rawgit.com/maxkrieger/aframe-draw-component/master/dist/aframe-draw-component.js"></script>
+  <script src="https://rawgit.com/scenevr/htmltexture-component/master/dist/aframe-htmltexture-component.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
+  <!-- <script src="http://mayognaise.github.io/aframe-html-shader/build.js"></script> -->
+
+</head>
+<body>
+  <a-scene>
+    <a-assets>
+      <div id="target">
+        <h1>HELLO<span>★</span></h1>
+        <span id="pre">A</span>
+      </div>
+
+    </a-assets>
+    <!-- <a-entity id="lettersEntity" color="green" geometry="primitive:plane;width:2;height:2;" rotation="-30 -30 0" position="-0.2 1.5 2.5" material="shader:html;target:#target;transparent:true;fps:1.5;"></a-entity> -->
+    <a-box color="red"></a-box>
+    <a-entity geometry="primitive: box" position="3 1 -4" draw="width: 1024; height: 1024;"
+          htmltexture="asset: #editor" size="10 10 10"></a-entity>
+  </a-scene>
+<div id="editor">function foo(items) {
+        var x = "All this is syntax highlighted";
+        return x;
+      }</div>
+
+        <script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+  </script>
+</body>
+</html>

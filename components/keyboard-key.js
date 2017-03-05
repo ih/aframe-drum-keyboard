@@ -7,8 +7,14 @@ AFRAME.registerComponent('keyboard-key', {
 
   init: function () {
     let _this = this;
+    // comes from the button component
     this.el.addEventListener('pressed', () => {
-      _this.el.emit('keypress', {key: _this.data.value});
+      // don't bubble, instead the keyboard will receive the event
+      // then emit it's own event that may take into account other factors e.g. shift key
+      _this.el.emit('keypress', {
+        value: _this.data.value,
+        label: _this.data.label
+      }, false);
     });
 
     let uiButtonAttributes = this.el.getAttribute('ui-button');
@@ -22,6 +28,8 @@ AFRAME.registerComponent('keyboard-key', {
     label.setAttribute('rotation', { x: -90, y: 0, z: 0 });
     label.setAttribute('position', {x: 0, y: uiButtonAttributes.size, z: 0});
     this.el.appendChild(label);
+
+    this.collidables = this.el.sceneEl.querySelectorAll(this.data.collidable);
   },
 
   tick: function () {
@@ -30,12 +38,12 @@ AFRAME.registerComponent('keyboard-key', {
     let topBB = new THREE.Box3().setFromObject(mesh);
     let self = this;
     // move definition of collidables to udpate?
-    let collidables = this.el.sceneEl.querySelectorAll(this.data.collidable);
-    collidables.forEach(function(collidable) {
+    this.collidables.forEach(function(collidable) {
       let collidableBB = new THREE.Box3().setFromObject(collidable.object3D);
       let collision = topBB.intersectsBox(collidableBB);
 
       if (collision) {
+        // get the button to do a keypress
         self.el.emit('hit');
       }
     });
